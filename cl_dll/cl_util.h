@@ -155,6 +155,8 @@ inline int safe_sprintf(char* dst, int len_dst, const char* format, ...)
 	return 0;
 }
 
+
+
 // sound functions
 inline void PlaySound(const char* szSound, float vol) { gEngfuncs.pfnPlaySoundByName(szSound, vol); }
 inline void PlaySound(int iSound, float vol) { gEngfuncs.pfnPlaySoundByIndex(iSound, vol); }
@@ -174,9 +176,9 @@ void VectorInverse(float* v);
 
 inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 {
-	r = (ulRGB & 0xFF0000) >> 16;
-	g = (ulRGB & 0xFF00) >> 8;
-	b = ulRGB & 0xFF;
+	r = 58;
+	g = 138;
+	b = 231;
 }
 
 HSPRITE LoadSprite(const char* pszName);

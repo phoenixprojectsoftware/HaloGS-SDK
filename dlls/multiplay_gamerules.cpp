@@ -127,7 +127,7 @@ void CHalfLifeMultiplay::RefreshSkillData()
 	gSkillData.plrDmg357 = 22;
 
 	// MP5 Round
-	gSkillData.plrDmgMP5 = 8;
+	gSkillData.plrDmgMP5 = 9;
 
 		// Carbine Round
 	gSkillData.plrDmgCarbine = 22;

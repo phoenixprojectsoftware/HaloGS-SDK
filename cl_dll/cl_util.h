@@ -174,6 +174,8 @@ void VectorInverse(float* v);
 // disable 'truncation from 'const double' to 'float' warning message
 #pragma warning(disable : 4305)
 
+
+//Changes HUD to CE blue
 inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 {
 	r = 58;

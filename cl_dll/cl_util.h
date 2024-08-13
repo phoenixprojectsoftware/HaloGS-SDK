@@ -175,7 +175,7 @@ void VectorInverse(float* v);
 #pragma warning(disable : 4305)
 
 
-//Changes HUD to CE blue
+//Changes HUD to CE blue 
 inline void UnpackRGB(int& r, int& g, int& b, unsigned long ulRGB)
 {
 	r = 58;

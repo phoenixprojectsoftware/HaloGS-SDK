@@ -74,8 +74,8 @@ bool CCarbine::GetItemInfo(ItemInfo* p)
 	p->pszAmmo1 = "carbine";
 	p->iMaxAmmo1 = CARBINE_MAX_CARRY;
 	p->iMaxClip = CARBINE_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 0;
+	p->iSlot = 3;
+	p->iPosition = 1;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_CARBINE;
 	p->iWeight = CARBINE_WEIGHT;

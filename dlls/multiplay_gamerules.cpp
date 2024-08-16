@@ -1061,7 +1061,7 @@ bool CHalfLifeMultiplay::FAllowFlashlight()
 //=========================================================
 bool CHalfLifeMultiplay::FAllowMonsters()
 {
-	return (allowmonsters.value != 0);
+	return (allowmonsters.value != 1);
 }
 
 //=========================================================

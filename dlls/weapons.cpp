@@ -326,6 +326,9 @@ void W_Precache()
 	// m7
 	UTIL_PrecacheOtherWeapon("weapon_m7");
 
+		// olr
+	UTIL_PrecacheOtherWeapon("weapon_olr");
+
 	// carbine
 	UTIL_PrecacheOtherWeapon("weapon_carbine");
 

@@ -32,6 +32,7 @@ void EV_HornetGunFire(event_args_t* args);
 void EV_TripmineFire(event_args_t* args);
 void EV_SnarkFire(event_args_t* args);
 void EV_FireM7(event_args_t* args);
+void EV_FireOLR(event_args_t* args);
 void EV_FireCarbine(event_args_t* args);
 
 

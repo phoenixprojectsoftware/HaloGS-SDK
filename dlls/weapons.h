@@ -87,6 +87,7 @@ public:
 #define TRIPMINE_WEIGHT -10
 
 #define M7_WEIGHT 7
+#define OLR_WEIGHT 20
 #define CARBINE_WEIGHT 20
 
 
@@ -103,7 +104,7 @@ public:
 #define SNARK_MAX_CARRY 15
 #define HORNET_MAX_CARRY 100
 #define M203_GRENADE_MAX_CARRY 10
-#define CARBINE_MAX_CARRY 90
+#define CARBINE_MAX_CARRY 120
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP -1
@@ -124,6 +125,7 @@ public:
 #define TRIPMINE_MAX_CLIP WEAPON_NOCLIP
 #define SNARK_MAX_CLIP WEAPON_NOCLIP
 #define M7_MAX_CLIP 46
+#define OLR_MAX_CLIP 30
 #define NEEDLER_MAX_CLIP 20
 #define CARBINE_MAX_CLIP 18
 
@@ -145,6 +147,7 @@ public:
 #define SNARK_DEFAULT_GIVE 5
 #define HIVEHAND_DEFAULT_GIVE 60
 #define M7_DEFAULT_GIVE 46
+#define OLR_DEFAULT_GIVE 150
 #define CARBINE_DEFAULT_GIVE 54
 
 // The amount of ammo given to a player by an ammo item.
@@ -698,6 +701,47 @@ public:
 
 private:
 	unsigned short m_usM7;
+};
+
+enum olr_e
+{
+	OLR_LONGIDLE = 0,
+	OLR_IDLE1,
+	OLR_LAUNCH,
+	OLR_RELOAD,
+	OLR_DEPLOY,
+	OLR_FIRE1,
+	OLR_FIRE2,
+	OLR_FIRE3,
+};
+
+class COLR : public CBasePlayerWeapon
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	int iItemSlot() override { return 3; }
+	bool GetItemInfo(ItemInfo* p) override;
+
+	void PrimaryAttack() override;
+	void SecondaryAttack() override;
+	bool Deploy() override;
+	void Reload() override;
+	void WeaponIdle() override;
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	bool UseDecrement() override
+	{
+#if defined(CLIENT_WEAPONS)
+		return true;
+#else
+		return false;
+#endif
+	}
+
+private:
+	unsigned short m_usOLR;
 };
 
 enum carbine_e

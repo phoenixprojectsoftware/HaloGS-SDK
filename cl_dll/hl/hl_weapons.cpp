@@ -65,6 +65,7 @@ CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
 CM7 g_M7;
+COLR g_OLR;
 CCarbine g_Carbine;
 
 
@@ -457,6 +458,7 @@ void HUD_InitClientWeapons()
 	HUD_PrepEntity(&g_Python, &player);
 	HUD_PrepEntity(&g_Mp5, &player);
 	HUD_PrepEntity(&g_M7, &player);
+	HUD_PrepEntity(&g_OLR, &player);
 	HUD_PrepEntity(&g_Carbine, &player);
 	HUD_PrepEntity(&g_Crossbow, &player);
 	HUD_PrepEntity(&g_Shotgun, &player);
@@ -557,6 +559,10 @@ void HUD_WeaponsPostThink(local_state_s* from, local_state_s* to, usercmd_t* cmd
 
 	case WEAPON_M7:
 		pWeapon = &g_M7;
+		break;
+
+			case WEAPON_OLR:
+		pWeapon = &g_OLR;
 		break;
 
 	case WEAPON_CROSSBOW:

@@ -140,14 +140,13 @@ void CCarbine::PrimaryAttack()
 #else
 	if (g_pGameRules->IsMultiplayer())
 #endif
+	if (m_pPlayer->m_iFOV != 0)
 	{
-		// optimized multiplayer. Widened to make it easier to hit a moving player
-		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_CARBINE, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
+		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_2DEGREES, 8192, BULLET_PLAYER_CARBINE, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 	}
 	else
 	{
-		// single player spread
-		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_3DEGREES, 8192, BULLET_PLAYER_CARBINE, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
+		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_6DEGREES, 8192, BULLET_PLAYER_CARBINE, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 	}
 
 	int flags;
@@ -163,11 +162,21 @@ void CCarbine::PrimaryAttack()
 		// HEV suit - indicate out of ammo condition
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
 
-	m_flNextPrimaryAttack = GetNextAttackDelay(0.3);
 
-	if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+		if (m_pPlayer->m_iFOV != 60)
+	{
+		m_flNextPrimaryAttack = GetNextAttackDelay(0.24);
 
+		if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.24;
+	}
+		else
+		{
+			m_flNextPrimaryAttack = GetNextAttackDelay(0.3);
+
+			if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
+				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+		}
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 }
 
@@ -194,7 +203,7 @@ void CCarbine::Reload()
 	if (m_pPlayer->ammo_carbine <= 0)
 		return;
 
-	DefaultReload(CARBINE_MAX_CLIP, CARBINE_RELOAD, 2.0);
+	DefaultReload(CARBINE_MAX_CLIP, CARBINE_RELOAD, 1.7);
 }
 
 

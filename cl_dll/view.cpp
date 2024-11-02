@@ -262,9 +262,9 @@ void V_ApplyBob(struct ref_params_s* pparams, cl_entity_t *view)
 
 	// bob the angles
 	view->angles[ROLL] += bob.verticalBob * 0.5f;
-	view->angles[PITCH] -= bob.verticalBob * 0.4f;
+	view->angles[PITCH] -= bob.verticalBob * 1.4f;
 
-	view->angles[YAW] -= bob.laterialBob *0.3f;
+	//view->angles[YAW] -= bob.laterialBob *0.3f;
 
 	VectorMA(view->origin, bob.laterialBob * 0.8f, pparams->right, view->origin);
 }

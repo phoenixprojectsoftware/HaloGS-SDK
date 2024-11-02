@@ -470,7 +470,7 @@ void EV_FireGlock1(event_args_t* args)
 
 	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHELL);
 
-	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pl_gun3.wav", gEngfuncs.pfnRandomFloat(0.92, 1.0), ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3));
+	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_AUTO, "weapons/pl_gun3.wav", gEngfuncs.pfnRandomFloat(0.92, 1.0), ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3));
 
 	EV_GetGunPosition(args, vecSrc, origin);
 
@@ -677,16 +677,21 @@ void EV_FireMP5(event_args_t* args)
 
 	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHELL);
 
-	switch (gEngfuncs.pfnRandomLong(0, 1))
+switch (gEngfuncs.pfnRandomLong(0, 3))
 	{
 	case 0:
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEP1, "weapons/hks1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
 		break;
 	case 1:
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEP2, "weapons/hks2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		break;
+	case 2:
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEP3, "weapons/hks3.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		break;
+	case 3:
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEP4, "weapons/hks4.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
 		break;
 	}
-
 	EV_GetGunPosition(args, vecSrc, origin);
 	VectorCopy(forward, vecAiming);
 

@@ -621,6 +621,12 @@
 #define CHAN_STREAM 5			  // allocate stream channel from the static or dynamic area
 #define CHAN_STATIC 6			  // allocate channel from the static area
 #define CHAN_NETWORKVOICE_BASE 7  // voice data coming across the network
+
+// Sabian: adding extra weapon channels for cool sound effects.
+#define CHAN_WEP1 8				  // weapon hl25 channel
+#define CHAN_WEP2 9				  // weapon hl25 channel
+#define CHAN_WEP3 10			  // weapon hl25 channel
+#define CHAN_WEP4 11			  // weapon hl25 channel
 #define CHAN_NETWORKVOICE_END 500 // network voice data reserves slots (CHAN_NETWORKVOICE_BASE through CHAN_NETWORKVOICE_END).
 #define CHAN_BOT 501			  // channel used for bot chatter.
 

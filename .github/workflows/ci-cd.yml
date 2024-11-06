@@ -17,10 +17,15 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y g++-multilib clang libgl1-mesa-dev
+          sudo apt install dos2unix
       
+      # gendbg.sh is given write perms twice as a measure
       - name: Build
         run: |
           cd linux
+          chmod +x gendbg.sh
+          dos2unix gendbg.sh
+          chmod +x gendbg.sh
           make COMPILER=${{ matrix.compiler }} CFG=release -j2
       
       - name: Deploy

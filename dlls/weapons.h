@@ -113,7 +113,6 @@ public:
 #define GLOCK_MAX_CLIP 12
 #define PYTHON_MAX_CLIP 12
 #define MP5_MAX_CLIP 60
-#define MP5_DEFAULT_AMMO 25
 #define SHOTGUN_MAX_CLIP 12
 #define CROSSBOW_MAX_CLIP 4
 #define RPG_MAX_CLIP 2

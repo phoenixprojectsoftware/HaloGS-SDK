@@ -36,6 +36,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/bmodels.o \
 	$(HLDLL_OBJ_DIR)/bullsquid.o \
 	$(HLDLL_OBJ_DIR)/buttons.o \
+	$(HLDLL_OBJ_DIR)/carbine.o \
 	$(HLDLL_OBJ_DIR)/cbase.o \
 	$(HLDLL_OBJ_DIR)/client.o \
 	$(HLDLL_OBJ_DIR)/combat.o \
@@ -81,7 +82,9 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/monsters.o \
 	$(HLDLL_OBJ_DIR)/monsterstate.o \
 	$(HLDLL_OBJ_DIR)/mortar.o \
+	$(HLDLL_OBJ_DIR)/m7.o \
 	$(HLDLL_OBJ_DIR)/mp5.o \
+	$(HLDLL_OBJ_DIR)/olr.o \
 	$(HLDLL_OBJ_DIR)/nihilanth.o \
 	$(HLDLL_OBJ_DIR)/nodes.o \
 	$(HLDLL_OBJ_DIR)/observer.o \

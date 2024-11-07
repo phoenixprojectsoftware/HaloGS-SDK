@@ -1,6 +1,12 @@
 name: CI/CD
 
-on: [push, pull_request]
+on:
+    push:
+        paths:
+        - 'SourceCode/**'
+    pull_request:
+        paths:
+        - 'SourceCode/**'
 
 jobs:
   linux:
@@ -22,7 +28,7 @@ jobs:
       # gendbg.sh is given write perms twice as a measure
       - name: Build
         run: |
-          cd linux
+          cd SourceCode/linux
           chmod +x gendbg.sh
           dos2unix gendbg.sh
           chmod +x gendbg.sh
@@ -33,10 +39,10 @@ jobs:
         with:
           name: Linux-x86-${{ matrix.compiler }}
           path: |
-            linux/release/client.so
-            linux/release/client.so.dbg
-            linux/release/hl.so
-            linux/release/hl.so.dbg
+            SourceCode/linux/release/client.so
+            SourceCode/linux/release/client.so.dbg
+            SourceCode/linux/release/hl.so
+            SourceCode/linux/release/hl.so.dbg
       
   win32:
     name: Win32
@@ -51,15 +57,15 @@ jobs:
           msbuild-architecture: x86
       
       - name: Build
-        run: msbuild projects/vs2019/HaloGS.sln -t:rebuild -property:Configuration=Release -maxcpucount:2 /p:AdditionalOptions="/std:c++20"
+        run: msbuild SourceCode/projects/vs2019/HaloGS.sln -t:rebuild -property:Configuration=Release -maxcpucount:2 /p:AdditionalOptions="/std:c++20"
       
       - name: Deploy
         uses: actions/upload-artifact@v4
         with:
           name: Win32
           path: |
-            projects/vs2019/Release/hl_cdll/client.dll
-            projects/vs2019/Release/hl_cdll/client.pdb
-            projects/vs2019/Release/hldll/hl.dll
-            projects/vs2019/Release/hldll/hl.pdb
+           SourceCode/projects/vs2019/Release/hl_cdll/client.dll
+           SourceCode/projects/vs2019/Release/hl_cdll/client.pdb
+           SourceCode/projects/vs2019/Release/hldll/hl.dll
+           SourceCode/projects/vs2019/Release/hldll/hl.pdb
       

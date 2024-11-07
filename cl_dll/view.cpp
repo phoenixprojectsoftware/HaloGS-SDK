@@ -529,6 +529,65 @@ void V_CalcIntermissionRefdef(struct ref_params_s* pparams)
 	v_angles = pparams->viewangles;
 }
 
+/*
+==================
+V_CalcViewModelLag
+	Gives the viewmodel that swingin' effect.
+==================
+*/
+void V_CalcViewModelLag(ref_params_t* pparams, cl_entity_s* view)
+{
+	const float m_flWeaponLag = 1.5f;
+	float flSpeed = 2;
+	float flScale = 1;
+	static Vector m_vecLastFacing;
+	Vector vOriginalOrigin = view->origin;
+	Vector vOriginalAngles = view->angles;
+	// Calculate our drift
+	Vector forward, right, up;
+	AngleVectors(InvPitch(view->angles), forward, right, up);
+	if (pparams->frametime != 0.0f) // not in paused
+	{
+		Vector vDifference;
+		vDifference = forward - m_vecLastFacing;
+		// If we start to lag too far behind, we'll increase the "catch up" speed.
+		// Solves the problem with fast cl_yawspeed, m_yaw or joysticks rotating quickly.
+		// The old code would slam lastfacing with origin causing the viewmodel to pop to a new position
+		float flDiff = vDifference.Length();
+		if ((flDiff > m_flWeaponLag) && (m_flWeaponLag > 0.0f))
+		{
+			float flScale = flDiff / m_flWeaponLag;
+			flSpeed *= flScale;
+		}
+		// FIXME:  Needs to be predictable?
+		m_vecLastFacing = m_vecLastFacing + vDifference * (flSpeed * pparams->frametime);
+		// Make sure it doesn't grow out of control!!!
+		m_vecLastFacing = m_vecLastFacing.Normalize();
+		view->origin = view->origin + (vDifference * -1.0f) * flScale;
+	}
+	AngleVectors(InvPitch(vOriginalAngles), forward, right, up);
+	float pitch = -vOriginalAngles[PITCH];
+	if (pitch > 180.0f)
+	{
+		pitch -= 360.0f;
+	}
+	else if (pitch < -180.0f)
+	{
+		pitch += 360.0f;
+	}
+	if (m_flWeaponLag <= 0.0f)
+	{
+		view->origin = vOriginalOrigin;
+		view->angles = vOriginalAngles;
+	}
+	else
+	{
+		// FIXME: These are the old settings that caused too many exposed polys on some models
+		view->origin = view->origin + forward * (-pitch * 0.005f);
+		view->origin = view->origin + right * (-pitch * 0.003f);
+		view->origin = view->origin + up * (-pitch * 0.002f);
+	}
+}
 
 /*
 ==================
@@ -863,6 +922,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	V_DropPunchAngle(pparams->frametime, (float*)&ev_punchangle);
 
 	V_ApplySmoothing ( pparams, view );
+
+	V_CalcViewModelLag(pparams, view);
 
 	// Store off v_angles before munging for third person
 	v_angles = pparams->viewangles;
@@ -1780,7 +1841,7 @@ void V_Init()
 
 	cl_waterdist		= gEngfuncs.pfnRegisterVariable( "cl_waterdist","4", 0 );
 	cl_chasedist		= gEngfuncs.pfnRegisterVariable( "cl_chasedist","112", 0 );
-	cl_viewroll			= gEngfuncs.pfnRegisterVariable("cl_viewroll", "1", 0);
+	cl_viewroll			= gEngfuncs.pfnRegisterVariable("cl_viewroll", "0", 0);
 }
 
 

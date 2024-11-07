@@ -1,5 +1,6 @@
 // view/refresh setup functions
-
+#include <algorithm>
+#include <cmath>
 #include "hud.h"
 #include "cl_util.h"
 #include "cvardef.h"
@@ -158,29 +159,33 @@ void V_InterpolateAngles( float *start, float *end, float *output, float frac )
 	V_NormalizeAngles( output );
 } */
 
-// Quakeworld bob code, this fixes jitters in the mutliplayer since the clock (pparams->time) isn't quite linear
-float V_CalcBob(struct ref_params_s* pparams)
+struct
 {
-	static double bobtime = 0;
-	static float bob = 0;
+	float bob[2];
+
+	double bobtime[2];
+	double lasttime[2];
+} viewbob;
+void V_CalcBob(struct ref_params_s* pparams, int dir, float freqmod)
+{
+	float bob = 0.0f;
 	float cycle;
-	static float lasttime = 0;
 	Vector vel;
 
-
-	if (pparams->onground == -1 ||
-		pparams->time == lasttime)
+	if (pparams->onground < 1 ||
+		pparams->time == viewbob.lasttime[dir])
 	{
 		// just use old value
-		return bob;
+		viewbob.bob[dir] = std::lerp(viewbob.bob[dir], 0, pparams->frametime * 20.0f);
+		return;
 	}
 
-	lasttime = pparams->time;
+	viewbob.lasttime[dir] = pparams->time;
 
-	//TODO: bobtime will eventually become a value so large that it will no longer behave properly.
-	//Consider resetting the variable if a level change is detected (pparams->time < lasttime might do the trick).
-	bobtime += pparams->frametime;
-	cycle = bobtime - (int)(bobtime / cl_bobcycle->value) * cl_bobcycle->value;
+	// TODO: bobtime will eventually become a value so large that it will no longer behave properly.
+	// Consider resetting the variable if a level change is detected (pparams->time < lasttime might do the trick).
+	viewbob.bobtime[dir] += pparams->frametime * freqmod;
+	cycle = viewbob.bobtime[dir] - (int)(viewbob.bobtime[dir] / cl_bobcycle->value) * cl_bobcycle->value;
 	cycle /= cl_bobcycle->value;
 
 	if (cycle < cl_bobup->value)
@@ -201,9 +206,9 @@ float V_CalcBob(struct ref_params_s* pparams)
 	bob = bob * 0.3 + bob * 0.7 * sin(cycle);
 	bob = V_min(bob, 4);
 	bob = V_max(bob, -7);
-	return bob;
-}
 
+	viewbob.bob[dir] = std::lerp(viewbob.bob[dir], bob, pparams->frametime * 20.0f);
+}
 /*
 ===============
 V_CalcRoll
@@ -740,7 +745,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	cl_entity_t		*ent, *view;
 	int				i;
 	Vector			angles;
-	float			bob;
 
 
 	Vector camAngles, camForward, camRight, camUp;
@@ -760,13 +764,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	// view is the weapon model (only visible from inside body )
 	view = gEngfuncs.GetViewModel();
 
-	// transform the view offset by the model's matrix to get the offset from
-	// model origin for the view
-	bob = V_CalcBob ( pparams );
-
 	// refresh position
 	VectorCopy ( pparams->simorg, pparams->vieworg );
-	pparams->vieworg[2] += ( bob );
 	VectorAdd( pparams->vieworg, pparams->viewheight, pparams->vieworg );
 
 	VectorCopy ( pparams->cl_viewangles, pparams->viewangles );
@@ -826,22 +825,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	// Let the viewmodel shake at about 10% of the amplitude
 	gEngfuncs.V_ApplyShake(view->origin, view->angles, 0.9);
 
-	for (i = 0; i < 3; i++)
-	{
-		view->origin[i] += bob * 0.4 * pparams->forward[i];
-	}
-	view->origin[2] += bob;
-
-	// throw in a little tilt.
-	view->angles[YAW] -= bob * 0.5;
-	view->angles[ROLL] -= bob * 1;
-	view->angles[PITCH] -= bob * 0.3;
-
-	if (0 != cl_bobtilt->value)
-	{
-		VectorCopy(view->angles, view->curstate.angles);
-	}
-
 	// fudge position around to keep amount of weapon visible
 	// roughly equal with different FOV
 	if (pparams->viewsize == 110)
@@ -871,7 +854,19 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 
 	V_ApplySmoothing ( pparams, view );
 
+	// BlueNightHawk: Modern bobbing
+	V_CalcBob(pparams, 0, 0.75f); // right
+	V_CalcBob(pparams, 1, 1.50f); // up
+
 	V_CalcViewModelLag(pparams, view);
+
+		for (i = 0; i < 3; i++)
+	{
+		view->origin[i] += viewbob.bob[0] * 0.33 * pparams->right[i];
+		view->origin[i] += viewbob.bob[1] * 0.17 * pparams->up[i];
+	}
+
+	VectorCopy(view->angles, view->curstate.angles);
 
 	// Store off v_angles before munging for third person
 	v_angles = pparams->viewangles;

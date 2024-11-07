@@ -751,6 +751,8 @@ void CHudAmmo::UserCmd_NextWeapon()
 	{
 		pos = gpActiveSel->iSlotPos + 1;
 		slot = gpActiveSel->iSlot;
+
+		PlaySound("common/wpn_moveselect.wav", 1);
 	}
 
 	for (int loop = 0; loop <= 1; loop++)
@@ -792,6 +794,8 @@ void CHudAmmo::UserCmd_PrevWeapon()
 	{
 		pos = gpActiveSel->iSlotPos - 1;
 		slot = gpActiveSel->iSlot;
+
+		PlaySound("common/wpn_moveselect.wav", 1);
 	}
 
 	for (int loop = 0; loop <= 1; loop++)

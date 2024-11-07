@@ -1790,7 +1790,6 @@ void V_Init()
 
 	cl_waterdist		= gEngfuncs.pfnRegisterVariable( "cl_waterdist","4", 0 );
 	cl_chasedist		= gEngfuncs.pfnRegisterVariable( "cl_chasedist","112", 0 );
-	cl_viewroll			= gEngfuncs.pfnRegisterVariable("cl_viewroll", "0", 0);
 }
 
 

@@ -247,7 +247,7 @@ BobValues V_CalculateBob ( Vector velocity, float currentTime )
 	return bob;
 }
 
-void V_ApplyBob(struct ref_params_s* pparams, cl_entity_t *view)
+void V_ApplyBob(struct ref_params_s* pparams)
 {
 	if (!pparams->time)
 		return;
@@ -255,17 +255,18 @@ void V_ApplyBob(struct ref_params_s* pparams, cl_entity_t *view)
 	auto bob = V_CalculateBob(pparams->simvel, pparams->time);
 
 	// Apply bob, but scaled down to 40%
-	VectorMA(view->origin, bob.verticalBob * 0.1f, pparams->forward, view->origin);
+	VectorMA(pparams->vieworg, bob.verticalBob * 0.1f, pparams->forward, pparams->vieworg);
 
 	// Z bob a bit more
-	view->origin[2] += bob.verticalBob * 0.1f;
+	pparams->vieworg[2] += bob.verticalBob * 0.1f;
 
 	// bob the angles
-	view->angles[ROLL] += bob.verticalBob * 0.5f;
-	view->angles[PITCH] -= bob.verticalBob * 1.4f;
-	view->angles[YAW] -= bob.laterialBob * 0.1f;
+	pparams->viewangles[ROLL] += bob.verticalBob * 0.5f;
+	pparams->viewangles[PITCH] -= bob.verticalBob * 0.4f;
 
-	VectorMA(view->origin, bob.laterialBob * 0.8f, pparams->right, view->origin);
+	pparams->viewangles[YAW] -= bob.laterialBob *0.3f;
+
+	VectorMA(pparams->vieworg, bob.laterialBob * 0.8f, pparams->right, pparams->vieworg);
 }
 
 /*
@@ -887,7 +888,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	// Let the viewmodel shake at about 10% of the amplitude
 	gEngfuncs.V_ApplyShake(view->origin, view->angles, 0.9);
 
-	V_ApplyBob( pparams, view );
+	V_ApplyBob( pparams );
 
 	if (0 != cl_bobtilt->value)
 	{

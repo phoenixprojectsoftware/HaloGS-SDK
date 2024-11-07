@@ -1,6 +1,7 @@
 // view/refresh setup functions
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 #include "hud.h"
 #include "cl_util.h"
 #include "cvardef.h"

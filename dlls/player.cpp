@@ -3919,12 +3919,12 @@ void CBasePlayer::InternalSendSingleAmmoUpdate(int ammoIndex)
 		m_rgAmmoLast[ammoIndex] = m_rgAmmo[ammoIndex];
 
 		ASSERT(m_rgAmmo[ammoIndex] >= 0);
-		ASSERT(m_rgAmmo[ammoIndex] < 255);
+		ASSERT(m_rgAmmo[ammoIndex] < 600);
 
 		// send "Ammo" update message
 		MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
-		WRITE_BYTE(ammoIndex);
-		WRITE_BYTE(V_max(V_min(m_rgAmmo[ammoIndex], 254), 0)); // clamp the value to one byte
+		WRITE_SHORT(ammoIndex);
+		WRITE_SHORT(V_max(V_min(m_rgAmmo[ammoIndex], 600), 0)); // clamp the value to two bytes
 		MESSAGE_END();
 	}
 }
@@ -4173,7 +4173,7 @@ void CBasePlayer::UpdateClientData()
 			MESSAGE_BEGIN(MSG_ONE, gmsgWeaponList, NULL, pev);
 			WRITE_STRING(pszName);				   // string	weapon name
 			WRITE_BYTE(GetAmmoIndex(II.pszAmmo1)); // byte		Ammo Type
-			WRITE_BYTE(II.iMaxAmmo1);			   // byte     Max Ammo 1
+			WRITE_SHORT(II.iMaxAmmo1);			   // byte     Max Ammo 1
 			WRITE_BYTE(GetAmmoIndex(II.pszAmmo2)); // byte		Ammo2 Type
 			WRITE_BYTE(II.iMaxAmmo2);			   // byte     Max Ammo 2
 			WRITE_BYTE(II.iSlot);				   // byte		bucket

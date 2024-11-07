@@ -484,8 +484,8 @@ bool CHudAmmo::MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
 
-	int iIndex = READ_BYTE();
-	int iCount = READ_BYTE();
+	int iIndex = READ_SHORT();
+	int iCount = READ_SHORT();
 
 	gWR.SetAmmo(iIndex, abs(iCount));
 
@@ -495,8 +495,8 @@ bool CHudAmmo::MsgFunc_AmmoX(const char* pszName, int iSize, void* pbuf)
 bool CHudAmmo::MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
-	int iIndex = READ_BYTE();
-	int iCount = READ_BYTE();
+	int iIndex = READ_SHORT();
+	int iCount = READ_SHORT();
 
 	// Add ammo to the history
 	gHR.AddToHistory(HISTSLOT_AMMO, iIndex, abs(iCount));
@@ -507,7 +507,7 @@ bool CHudAmmo::MsgFunc_AmmoPickup(const char* pszName, int iSize, void* pbuf)
 bool CHudAmmo::MsgFunc_WeapPickup(const char* pszName, int iSize, void* pbuf)
 {
 	BEGIN_READ(pbuf, iSize);
-	int iIndex = READ_BYTE();
+	int iIndex = READ_SHORT();
 
 	// Add the weapon to the history
 	gHR.AddToHistory(HISTSLOT_WEAP, iIndex);
@@ -641,8 +641,8 @@ bool CHudAmmo::MsgFunc_WeaponList(const char* pszName, int iSize, void* pbuf)
 	strcpy(Weapon.szName, READ_STRING());
 	Weapon.iAmmoType = (int)READ_CHAR();
 
-	Weapon.iMax1 = READ_BYTE();
-	if (Weapon.iMax1 == 255)
+	Weapon.iMax1 = READ_SHORT();
+	if (Weapon.iMax1 == 600)
 		Weapon.iMax1 = -1;
 
 	Weapon.iAmmo2Type = READ_CHAR();
